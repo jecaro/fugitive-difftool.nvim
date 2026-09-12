@@ -1,0 +1,101 @@
+*fugitive-difftool.nvim.txt*   Difftool integration for fugitive.vim
+
+Author:  jecaro
+License: MIT (see <LICENSE>)
+
+==============================================================================
+CONTENTS                                    *fugitive-difftool-nvim-contents*
+
+    1. Introduction ......... |fugitive-difftool-nvim-introduction|
+    2. Installation ......... |fugitive-difftool-nvim-installation|
+    3. Usage ................ |fugitive-difftool-nvim-usage|
+    4. Commands ............. |fugitive-difftool-nvim-commands|
+    5. Notes ................ |fugitive-difftool-nvim-notes|
+
+==============================================================================
+1. Introduction                         *fugitive-difftool-nvim-introduction*
+
+fugitive-difftool.nvim completes |fugitive|'s `:Git difftool` integration.
+It lets you compare two revisions of a repository using the quickfix list,
+which is useful for code reviews: load a full diff between two branches or
+commits, then step through every changed file one at a time.
+
+This plugin requires vim-fugitive to be installed and does not work as a
+standalone plugin.
+
+==============================================================================
+2. Installation                         *fugitive-difftool-nvim-installation*
+
+Install with your favorite plugin manager, alongside vim-fugitive. For
+example, with lazy.nvim:
+>lua
+    {
+      "jecaro/fugitive-difftool.nvim",
+      config = function()
+        -- See |fugitive-difftool-nvim-commands|
+      end,
+    }
+<
+NixOS users can find an overlay in the repository's |flake.nix| that adds
+`fugitive-difftool-nvim` to the `vimPlugins` attribute set.
+
+==============================================================================
+3. Usage                                       *fugitive-difftool-nvim-usage*
+
+Run a `:Git difftool` command with `--name-status` so that one entry is
+added to the quickfix list per changed file, rather than per hunk:
+>
+    :Git! difftool --name-status master...my-feature
+<
+The `!` prevents Vim from jumping to the first quickfix entry immediately;
+jump explicitly once the list has finished loading, using one of the
+commands below.
+
+Note the `...` between the two refs: this diffs the tip of `my-feature`
+against its merge base with `master`, showing only the changes introduced
+by the feature branch rather than a full two-dot diff.
+
+==============================================================================
+4. Commands                                 *fugitive-difftool-nvim-commands*
+
+The plugin exposes Lua functions for navigating the quickfix list built by
+`:Git difftool`. Map them to user commands as needed:
+>lua
+    vim.api.nvim_create_user_command(
+      "Gcfir", require("fugitive-difftool").git_cfir, {}
+    )
+    vim.api.nvim_create_user_command(
+      "Gcla", require("fugitive-difftool").git_cla, {}
+    )
+    vim.api.nvim_create_user_command(
+      "Gcn", require("fugitive-difftool").git_cn, {}
+    )
+    vim.api.nvim_create_user_command(
+      "Gcp", require("fugitive-difftool").git_cp, {}
+    )
+    vim.api.nvim_create_user_command(
+      "Gcc", require("fugitive-difftool").git_cc, {}
+    )
+<
+                                                            *:Gcfir*
+:Gcfir                  Jump to the first entry in the quickfix list.
+
+                                                            *:Gcla*
+:Gcla                   Jump to the last entry in the quickfix list.
+
+                                                            *:Gcn*
+:Gcn                    Jump to the next entry in the quickfix list.
+
+                                                            *:Gcp*
+:Gcp                    Jump to the previous entry in the quickfix list.
+
+                                                            *:Gcc*
+:Gcc                    Jump to the currently selected quickfix entry.
+
+==============================================================================
+5. Notes                                       *fugitive-difftool-nvim-notes*
+
+This plugin is based on techniques described in vim-fugitive issue #132
+<https://github.com/tpope/vim-fugitive/issues/132>.
+
+vim:tw=78:ts=8:noet:ft=help:norl:
