@@ -16,7 +16,7 @@ jobs:
       - name: panvimdoc
         uses: kdheepak/panvimdoc@main
         with:
-          vimdoc: my-plugin-name        # required: your plugin's name, no .txt
+          vimdoc: fugitive-diffview     # required: your plugin's name, no .txt
           version: "Neovim >= 0.8.0"    # shown in the doc header
           demojify: true                # strip emojis, they don't render in vim
           treesitter: true              # syntax-highlight code blocks
