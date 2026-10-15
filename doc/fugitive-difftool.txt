@@ -8,8 +8,7 @@ CONTENTS                                      *fugitive-difftool-contents*
 
     1. Introduction ........... |fugitive-difftool-introduction|
     2. Usage .................. |fugitive-difftool-usage|
-    3. Suggested Commands ..... |fugitive-difftool-commands|
-    4. Lua API................. |fugitive-difftool-api|
+    3. Lua API................. |fugitive-difftool-api|
 
 ==============================================================================
 1. Introduction                               *fugitive-difftool-introduction*
@@ -32,49 +31,14 @@ added to the |quickfix| list per changed file, rather than per hunk:
 <
 The `!` prevents Vim from jumping to the first |quickfix| entry immediately;
 jump explicitly once the list has finished loading, using one of the
-|fugitive-difftool-commands|.
+functions provided by |fugitive-difftool-api|.
 
 Note the `...` between the two refs: this diffs the tip of `my-feature`
 against its merge base with `master`, showing only the changes introduced
 by the feature branch rather than a full two-dot diff.
 
 ==============================================================================
-3. Suggested Commands                         *fugitive-difftool-commands*
-
-The following commands are only suggestions and aren't available unless they
-are manually configured.
-
-:Gcfir                  Jump to the first entry in the |quickfix| list.
-
-:Gcla                   Jump to the last entry in the |quickfix| list.
-
-:Gcn                    Jump to the next entry in the |quickfix| list.
-
-:Gcp                    Jump to the previous entry in the |quickfix| list.
-
-:Gcc                    Jump to the currently selected |quickfix| entry.
-
-To set up the suggested commands, add the following to your config:
->lua
-    vim.api.nvim_create_user_command(
-      "Gcfir", require("fugitive-difftool").git_cfir, {}
-    )
-    vim.api.nvim_create_user_command(
-      "Gcla", require("fugitive-difftool").git_cla, {}
-    )
-    vim.api.nvim_create_user_command(
-      "Gcn", require("fugitive-difftool").git_cn, {}
-    )
-    vim.api.nvim_create_user_command(
-      "Gcp", require("fugitive-difftool").git_cp, {}
-    )
-    vim.api.nvim_create_user_command(
-      "Gcc", require("fugitive-difftool").git_cc, {}
-    )
-<
-
-==============================================================================
-4. Lua API                                    *fugitive-difftool-api*
+3. Lua API                                    *fugitive-difftool-api*
 
 The module `require("fugitive-difftool")` exposes the following functions for
 navigating the |quickfix| list. Each takes no arguments and is suitable for
