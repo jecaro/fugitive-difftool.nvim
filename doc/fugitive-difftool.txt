@@ -8,7 +8,7 @@ CONTENTS                                      *fugitive-difftool-contents*
 
     1. Introduction ........... |fugitive-difftool-introduction|
     2. Usage .................. |fugitive-difftool-usage|
-    3. Lua API................. |fugitive-difftool-api|
+    3. Lua API ................ |fugitive-difftool-api|
 
 ==============================================================================
 1. Introduction                               *fugitive-difftool-introduction*
@@ -18,8 +18,7 @@ It lets you compare two revisions of a repository using the |quickfix| list,
 which is useful for code reviews: load a full diff between two branches or
 commits, then step through every changed file one at a time.
 
-This plugin requires vim-fugitive to be installed and does not work as a
-standalone plugin.
+Requires vim-fugitive.
 
 ==============================================================================
 2. Usage                                      *fugitive-difftool-usage*
@@ -30,8 +29,8 @@ added to the |quickfix| list per changed file, rather than per hunk:
     :Git! difftool --name-status master...my-feature
 <
 The `!` prevents Vim from jumping to the first |quickfix| entry immediately;
-jump explicitly once the list has finished loading, using one of the
-functions provided by |fugitive-difftool-api|.
+jump explicitly once the list has finished loading, for example with `:Gcfir`
+as defined in the example of |fugitive-difftool-api|.
 
 Note the `...` between the two refs: this diffs the tip of `my-feature`
 against its merge base with `master`, showing only the changes introduced
@@ -44,19 +43,28 @@ The module `require("fugitive-difftool")` exposes the following functions for
 navigating the |quickfix| list. Each takes no arguments and is suitable for
 passing directly to |nvim_create_user_command()|.
 
+Example: >lua
+    local fd = require('fugitive-difftool')
+    vim.api.nvim_create_user_command('Gcfir', fd.git_cfir, {})
+    vim.api.nvim_create_user_command('Gcla', fd.git_cla, {})
+    vim.api.nvim_create_user_command('Gcn', fd.git_cn, {})
+    vim.api.nvim_create_user_command('Gcp', fd.git_cp, {})
+    vim.api.nvim_create_user_command('Gcc', fd.git_cc, {})
+<
+
                                               *fugitive-difftool.git_cfir()*
-`git_cfir()`    Jump to the first entry in the |quickfix| list. See |:Gcfir|.
+`git_cfir()`    Jump to the first entry in the |quickfix| list.
 
                                               *fugitive-difftool.git_cla()*
-`git_cla()`     Jump to the last entry in the |quickfix| list. See |:Gcla|.
+`git_cla()`     Jump to the last entry in the |quickfix| list.
 
                                               *fugitive-difftool.git_cn()*
-`git_cn()`      Jump to the next entry in the |quickfix| list. See |:Gcn|.
+`git_cn()`      Jump to the next entry in the |quickfix| list.
 
                                               *fugitive-difftool.git_cp()*
-`git_cp()`      Jump to the previous entry in the |quickfix| list. See |:Gcp|.
+`git_cp()`      Jump to the previous entry in the |quickfix| list.
 
                                               *fugitive-difftool.git_cc()*
-`git_cc()`      Jump to the currently selected |quickfix| entry. See |:Gcc|.
+`git_cc()`      Jump to the currently selected |quickfix| entry.
 
  vim:tw=78:et:ft=help:norl:
